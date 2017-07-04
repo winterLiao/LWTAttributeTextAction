@@ -49,12 +49,20 @@
     [attributedString2 insertAttributedString:attachString atIndex:rang3.location];
     _textLabel2.attributedText = attributedString2;
     [_textLabel2 addAttributeActionWithRange:[NSArray arrayWithObjects:[NSValue valueWithRange:rang1],[NSValue valueWithRange:rang2],[NSValue valueWithRange:rang3],nil] tapTargetAction:^(NSString *string, NSRange range, NSInteger index) {
+        UIAlertController *al = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"点击了第%ld个",index] message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction =[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [al addAction:cancelAction];
+        [self presentViewController:al animated:NO completion:^{
+            
+        }];
+//        UIAlertAction *action = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%ld",index] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            
+//        }];
+//        [al addAction:action];
+//]
         NSLog(@"点击字符串:%@ 范围在%@，第%ld个",string,NSStringFromRange(range),index+1);
     }];
 
-    
-
-    
     // Do any additional setup after loading the view, typically from a nib.
 }
 

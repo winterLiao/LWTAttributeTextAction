@@ -116,31 +116,24 @@
     
     __weak typeof(self) weakSelf = self;
     
-    [self yb_getTapFrameWithTouchPoint:point result:^(NSString *string, NSRange range, NSInteger index) {
+    [self getTapFrameWithTouchPoint:point result:^(NSString *string, NSRange range, NSInteger index) {
         
         if (weakSelf.tapBlock) {
             weakSelf.tapBlock (string , range , index);
         }
-        
-//        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(yb_attributeTapReturnString:range:index:)]) {
-//            [weakSelf.delegate yb_attributeTapReturnString:string range:range index:index];
-//        }
-        
     }];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     
-//    if (self.isTapAction) {
-        if ([self yb_getTapFrameWithTouchPoint:point result:nil]) {
-            return self;
-        }
-//    }
+    if ([self getTapFrameWithTouchPoint:point result:nil]) {
+        return self;
+    }
     return [super hitTest:point withEvent:event];
 }
 
 #pragma mark - getTapFrame
-- (BOOL)yb_getTapFrameWithTouchPoint:(CGPoint)point result:(void (^) (NSString *string , NSRange range , NSInteger index))resultBlock
+- (BOOL)getTapFrameWithTouchPoint:(CGPoint)point result:(void (^) (NSString *string , NSRange range , NSInteger index))resultBlock
 {
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
     
@@ -191,7 +184,7 @@
     
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
     
-    CGAffineTransform transform = [self yb_transformForCoreText];
+    CGAffineTransform transform = [self transformForCoreText];
     
     CGFloat verticalOffset = 0;
     
@@ -200,7 +193,7 @@
         
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
         
-        CGRect flippedRect = [self yb_getLineBounds:line point:linePoint];
+        CGRect flippedRect = [self getLineBounds:line point:linePoint];
         
         CGRect rect = CGRectApplyAffineTransform(flippedRect, transform);
         
@@ -261,30 +254,12 @@
     return NO;
 }
 
-//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if (self.isTapEffect) {
-//        
-//        [self performSelectorOnMainThread:@selector(yb_tapEffectWithStatus:) withObject:nil waitUntilDone:NO];
-//        
-//    }
-//}
-//
-//- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if (self.isTapEffect) {
-//        
-//        [self performSelectorOnMainThread:@selector(yb_tapEffectWithStatus:) withObject:nil waitUntilDone:NO];
-//        
-//    }
-//}
-
-- (CGAffineTransform)yb_transformForCoreText
+- (CGAffineTransform)transformForCoreText
 {
     return CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
 }
 
-- (CGRect)yb_getLineBounds:(CTLineRef)line point:(CGPoint)point
+- (CGRect)getLineBounds:(CTLineRef)line point:(CGPoint)point
 {
     CGFloat ascent = 0.0f;
     CGFloat descent = 0.0f;
