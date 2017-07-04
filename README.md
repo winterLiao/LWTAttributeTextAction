@@ -1,3 +1,4 @@
+![](http://ok841h9gr.bkt.clouddn.com/%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92.gif)
 ### 需求
 字符串中某段区域需要添加点击效果或者字符串中添加可点击的按钮。       
 解决：给UILabel添加点击事件的category。
